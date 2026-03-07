@@ -6,13 +6,15 @@ import Header from '@/components/Header'
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS, PROFILE_MENU } from '@/constants'
+import { useClerk } from '@clerk/expo'
 
 export default function Profile() {
 
-  const { user } = { user: dummyUser }
+  const { user, signOut } = useClerk()
   const router = useRouter()
 
   const handleLogout = async () => {
+    await signOut();
     router.replace('/sign-in')
   }
 
