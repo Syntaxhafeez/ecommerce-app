@@ -133,12 +133,13 @@ export const removeCartItem = async (req: Request, res: Response) => {
 // delete /api/cart
 export const clearCart = async (req: Request, res: Response) => {
     try {
-        const cart = await Cart.findOne({user: req.user._id})
-        if(cart) {
+        const cart = await Cart.findOne({ user: req.user._id })
+        if (cart) {
             cart.items = [];
             cart.totalAmount = 0;
             await cart.save();
         }
+        res.json({ success: true, message: "Cart cleared" })
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message })
     }
