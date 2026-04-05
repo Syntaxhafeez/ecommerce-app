@@ -2,12 +2,13 @@ import { View, Text, ScrollView, Image, Dimensions, TouchableOpacity, ActivityIn
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Header from '@/components/Header'
-import { BANNERS, dummyProducts } from '@/assets/assets'
+import { BANNERS } from '@/assets/assets'
 import { useRouter } from 'expo-router'
 import { CATEGORIES } from '@/constants'
 import CategoryItem from '@/components/CategoryItem'
 import { Product } from '@/constants/types'
 import ProductCard from '@/components/ProductCard'
+import api from '@/constants/api'
 
 const { width } = Dimensions.get("window")
 
@@ -21,8 +22,14 @@ export default function Home() {
   const categories = [{ id: 'all', name: 'All', icon: 'grid' }, ...CATEGORIES]
 
   const fetchProducts = async () => {
-    setProducts(dummyProducts);
-    setLoading(false)
+    try {
+      const { data } = await api.get("products")
+      setProducts(data.data)
+    } catch (error) {
+      console.error("Error fetching products: ", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
